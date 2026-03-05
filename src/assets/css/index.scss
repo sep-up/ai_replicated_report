@@ -1,0 +1,65 @@
+body,
+html,
+div,
+section,
+article,
+aside,
+main,
+footer,
+header,
+nav,
+figure,
+figcaption,
+dialog,
+menu,
+menuitem,
+hgroup,
+details,
+ruby,
+progress h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+img,
+ul,
+ol,
+dl,
+li,
+dt,
+dd,
+table,
+tr,
+td,
+thead,
+tbody,
+form,
+label,
+input,
+area,
+select,
+video,
+audio,
+embed {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html,
+#app {
+  height: 100%;
+}
+
+div,
+section,
+p,
+ul,
+li,
+header {
+  box-sizing: border-box;
+}
