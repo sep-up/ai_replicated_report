@@ -7,9 +7,7 @@
  */
 
 import axios from 'axios'
-import store from '@/store'
 import { getToken, getTokenType } from '@/utils/auth'
-import { Notify } from 'vant'
 
 const service = axios.create({
   withCredentials: true,
@@ -22,11 +20,12 @@ service.interceptors.request.use(
     // 设置token
     // if (store.getters.token) {
     config.headers['Authorization'] = getTokenType() + ' ' + getToken()
+    config.headers['x-request-host'] = 'shenzhenjunyuekeji2'
     // }
     // pad 端的baseUrl 可能会随时改变
     config.baseURL =
       process.env.NODE_ENV === 'development'
-        ? process.env.VUE_APP_NGINX_PATH
+        ? 'https://apigateway.yelinksaas.com:8310/factory/v1'
         : localStorage.getItem('baseUrl') + '/factory/v1'
     return config
   },

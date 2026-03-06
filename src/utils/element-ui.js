@@ -26,7 +26,9 @@ import {
   Loading,
   Divider,
   Progress,
-  Notification
+  Notification,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue.use(Form)
@@ -46,6 +48,8 @@ Vue.use(Tag)
 Vue.use(Divider)
 Vue.use(Loading.directive)
 Vue.use(Progress)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message

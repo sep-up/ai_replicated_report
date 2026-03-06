@@ -32,10 +32,10 @@ export default {
         //   .then(function (appId) {
         //     that.getPermission('yelink.workorder.report')
         //   })
-        that.getPermission('yelink.workorder.report')
+       // that.getPermission('yelink.workorder.report')
       }
     })
-    this.getPermission('yelink.workorder.report') // 开发测试
+    // this.getPermission('yelink.workorder.report') // 开发测试
     setTimeout(() => {
       document.getElementById('__vconsole').style.display = 'none'
     }, 500)
