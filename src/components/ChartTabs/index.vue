@@ -7,26 +7,38 @@
 -->
 <template>
   <div class="chart-tabs">
-    <el-tabs v-model="activeTab" @tab-click="handleTabClick">
-      <el-tab-pane name="workOrder">
-        <span slot="label">
-          <i class="el-icon-s-data"></i>
-          <span>本月工单产出趋势</span>
-        </span>
-        <div v-loading="loading.workOrder" class="chart-container">
-          <div ref="workOrderChart" class="chart"></div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane name="taskProgress">
-        <span slot="label">
-          <i class="el-icon-s-order"></i>
-          <span>本月报工进度趋势</span>
-        </span>
-        <div v-loading="loading.taskProgress" class="chart-container">
-          <div v-if="activeTab === 'taskProgress'" ref="taskProgressChart" class="chart"></div>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="tabs-container" role="tablist" aria-orientation="horizontal">
+      <button 
+        role="tab" 
+        type="button" 
+        :aria-selected="activeTab === 'workOrder'" 
+        :data-state="activeTab === 'workOrder' ? 'active' : 'inactive'" 
+        :data-active="activeTab === 'workOrder'" 
+        class="tab-button" 
+        @click="activeTab = 'workOrder'; handleTabClick({ name: 'workOrder' })"
+      >
+        <i class="el-icon-s-data"></i>
+        <span>本月工单产出趋势</span>
+      </button>
+      <button 
+        role="tab" 
+        type="button" 
+        :aria-selected="activeTab === 'taskProgress'" 
+        :data-state="activeTab === 'taskProgress' ? 'active' : 'inactive'" 
+        :data-active="activeTab === 'taskProgress'" 
+        class="tab-button" 
+        @click="activeTab = 'taskProgress'; handleTabClick({ name: 'taskProgress' })"
+      >
+        <i class="el-icon-s-order"></i>
+        <span>本月报工进度趋势</span>
+      </button>
+    </div>
+    <div v-loading="loading.workOrder" v-if="activeTab === 'workOrder'" class="chart-container">
+      <div ref="workOrderChart" class="chart"></div>
+    </div>
+    <div v-loading="loading.taskProgress" v-else class="chart-container">
+      <div ref="taskProgressChart" class="chart"></div>
+    </div>
   </div>
 </template>
 
@@ -65,10 +77,18 @@ export default {
   },
   methods: {
     initWorkOrderChart() {
-      this.workOrderChart = echarts.init(this.$refs.workOrderChart)
+      if (this.$refs.workOrderChart) {
+        if (this.workOrderChart) {
+          this.workOrderChart.dispose()
+        }
+        this.workOrderChart = echarts.init(this.$refs.workOrderChart)
+      }
     },
     initTaskProgressChart() {
-      if (this.$refs.taskProgressChart && !this.taskProgressChart) {
+      if (this.$refs.taskProgressChart) {
+        if (this.taskProgressChart) {
+          this.taskProgressChart.dispose()
+        }
         this.taskProgressChart = echarts.init(this.$refs.taskProgressChart)
       }
     },
@@ -82,17 +102,18 @@ export default {
     },
     handleTabClick(tab) {
       if (tab.name === 'workOrder') {
-        this.loadWorkOrderData()
+        this.$nextTick(() => {
+          this.initWorkOrderChart()
+          this.loadWorkOrderData()
+        })
       } else if (tab.name === 'taskProgress') {
         this.$nextTick(() => {
+          this.initTaskProgressChart()
           this.loadTaskProgressData()
         })
       }
     },
     async loadWorkOrderData() {
-      if (this.workOrderDataLoaded && this.workOrderChart) {
-        return
-      }
       this.loading.workOrder = true
       try {
         const res = await getWorkOrderCountByMonth()
@@ -105,20 +126,20 @@ export default {
             this.workOrderChart.setOption({
               tooltip: {
                 trigger: 'axis',
-                formatter: '{b}: {c} 单'
+                formatter: '{b}: {c} '
               },
               grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '15%',
+                bottom: '10%',
                 top: '10%',
                 containLabel: true
               },
               xAxis: {
                 type: 'category',
-                data: dates,
+                data: dates.length > 0 ? dates : ['暂无数据'],
                 axisLabel: {
-                  rotate: 45,
+                  rotate: 0,
                   interval: 0,
                   fontSize: 11
                 }
@@ -132,7 +153,7 @@ export default {
               },
               series: [{
                 name: '工单数量',
-                data: counts,
+                data: dates.length > 0 ? counts : [0],
                 type: 'bar',
                 barWidth: '60%',
                 itemStyle: {
@@ -159,11 +180,6 @@ export default {
       }
     },
     async loadTaskProgressData() {
-      if (this.taskProgressDataLoaded && this.taskProgressChart) {
-        return
-      }
-
-      this.initTaskProgressChart()
       this.loading.taskProgress = true
       try {
         const res = await getTaskProgressByMonth()
@@ -176,20 +192,20 @@ export default {
             this.taskProgressChart.setOption({
               tooltip: {
                 trigger: 'axis',
-                formatter: '{b}: {c} 单'
+                formatter: '{b}: {c} '
               },
               grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '15%',
+                bottom: '10%',
                 top: '10%',
                 containLabel: true
               },
               xAxis: {
                 type: 'category',
-                data: dates,
+                data: dates.length > 0 ? dates : ['暂无数据'],
                 axisLabel: {
-                  rotate: 45,
+                  rotate: 0,
                   interval: 0,
                   fontSize: 11
                 }
@@ -203,7 +219,7 @@ export default {
               },
               series: [{
                 name: '报工数量',
-                data: counts,
+                data: dates.length > 0 ? counts : [0],
                 type: 'bar',
                 barWidth: '60%',
                 itemStyle: {
@@ -241,18 +257,48 @@ export default {
   padding: 12px;
   margin-bottom: 16px;
 
-  ::v-deep .el-tabs__header {
+  .tabs-container {
+    role: tablist;
+    aria-orientation: horizontal;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 4px;
     margin-bottom: 12px;
   }
 
-  ::v-deep .el-tabs__item {
+  .tab-button {
+    role: tab;
+    type: button;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 6px;
+    padding: 4px 12px;
     font-size: 14px;
     font-weight: 500;
-  }
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
+    color: #666666;
+    cursor: pointer;
 
-  ::v-deep .el-tabs__item.is-active {
-    color: #1890FF;
-    font-weight: 600;
+    &:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    &[data-active="true"] {
+      background: #ffffff;
+      color: #333333;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    i {
+      margin-right: 6px;
+    }
   }
 
   .chart-container {

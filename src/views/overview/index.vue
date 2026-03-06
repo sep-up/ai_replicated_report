@@ -7,8 +7,6 @@
 -->
 <template>
   <div class="overview">
-    <CommonHeader title="智能制造" :is-show-back="false" />
-    <CommonMain>
       <div class="dashboard-container">
         <!-- 顶部数据统计卡片 -->
         <StatisticsCards />
@@ -17,7 +15,6 @@
         <!-- 下方趋势分析卡片 -->
         <TrendAnalysisCards />
       </div>
-    </CommonMain>
   </div>
 </template>
 

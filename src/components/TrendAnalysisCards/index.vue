@@ -190,7 +190,7 @@ export default {
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '15%',
+          bottom: '10%',
           top: '10%',
           containLabel: true
         },
@@ -198,7 +198,7 @@ export default {
           type: 'category',
           data: this.orderData.categories,
           axisLabel: {
-            rotate: 30,
+            rotate: 0,
             interval: 0,
             fontSize: 11
           }
@@ -231,12 +231,12 @@ export default {
       const option = {
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:{color};"></span>{b}: {c} ({d}%)'
         },
         legend: {
-          orient: 'vertical',
-          right: '5%',
-          top: 'center',
+          orient: 'horizontal',
+          bottom: '0%',
+          left: 'center',
           formatter: (name) => {
             const item = this.processData.find(item => item.name === name)
             return item ? `${name}: ${item.value}` : name
@@ -249,26 +249,33 @@ export default {
           name: '工序数量',
           type: 'pie',
           radius: ['40%', '70%'],
-          center: ['35%', '50%'],
+          center: ['50%', '45%'],
           avoidLabelOverlap: false,
           label: {
             show: true,
-            position: 'center',
-            formatter: `总数\n${total}`,
-            fontSize: 14,
-            fontWeight: 'bold'
+            position: 'outer',
+            formatter: '{b}: {d}%',
+            fontSize: 12
           },
           emphasis: {
             label: {
               show: true,
-              fontSize: '16',
+              fontSize: '14',
               fontWeight: 'bold'
             }
           },
           labelLine: {
-            show: false
+            show: true,
+            length: 20,
+            length2: 30
           },
-          data: this.processData
+          data: this.processData.map(item => ({
+            name: item.name,
+            value: item.value
+          })),
+          itemStyle: {
+            borderRadius: 4
+          }
         }]
       }
       this.processChart.setOption(option)
@@ -277,12 +284,12 @@ export default {
       const option = {
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:{color};"></span>{b}: {c} ({d}%)'
         },
         legend: {
-          orient: 'vertical',
-          right: '5%',
-          top: 'center',
+          orient: 'horizontal',
+          bottom: '0%',
+          left: 'center',
           formatter: (name) => {
             const item = this.defectData.find(item => item.name === name)
             return item ? `${name}: ${item.value}` : name
@@ -295,8 +302,11 @@ export default {
           name: '不良类型',
           type: 'pie',
           radius: '60%',
-          center: ['35%', '50%'],
-          data: this.defectData,
+          center: ['50%', '45%'],
+          data: this.defectData.map(item => ({
+            name: item.name,
+            value: item.value
+          })),
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -305,7 +315,15 @@ export default {
             }
           },
           label: {
-            fontSize: 11
+            show: true,
+            position: 'outer',
+            formatter: '{b}: {d}%',
+            fontSize: 12
+          },
+          labelLine: {
+            show: true,
+            length: 20,
+            length2: 30
           }
         }]
       }
@@ -346,7 +364,7 @@ export default {
     }
 
     .chart-container {
-    height: 250px;
+    height: 280px;
     width: 100%;
     position: relative;
 

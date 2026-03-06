@@ -42,7 +42,7 @@ export default {
         {
           title: '生产订单数',
           color: '#1890FF',
-          gradient: 'linear-gradient(135deg, #1890FF 0%, #69C0FF 100%)',
+          gradient: 'linear-gradient(135deg, #409EFF 0%, #91CBFF 100%)',
           total: 0,
           stats: [
             { label: '创建', value: 0 },
@@ -53,7 +53,7 @@ export default {
         {
           title: '销售订单数',
           color: '#FAAD14',
-          gradient: 'linear-gradient(135deg, #D4B106 0%, #F7CB45 100%)',
+          gradient: 'linear-gradient(135deg, #E6A23C 0%, #F9D59B 100%)',
           total: 0,
           stats: [
             { label: '创建', value: 0 },
@@ -64,7 +64,7 @@ export default {
         {
           title: '采购订单数',
           color: '#722ED1',
-          gradient: 'linear-gradient(135deg, #722ED1 0%, #B37FEB 100%)',
+          gradient: 'linear-gradient(135deg, #9254DE 0%, #C7A7F0 100%)',
           total: 0,
           stats: [
             { label: '创建', value: 0 },
@@ -75,7 +75,7 @@ export default {
         {
           title: '生产工单数',
           color: '#F5222D',
-          gradient: 'linear-gradient(135deg, #F5222D 0%, #FF7875 100%)',
+          gradient: 'linear-gradient(135deg, #F75959 0%, #FFB3B3 100%)',
           total: 0,
           stats: [
             { label: '创建', value: 0 },
@@ -186,25 +186,25 @@ export default {
       margin-bottom: 8px;
 
       .card-title {
-        font-size: 13px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 600;
         opacity: 0.9;
       }
     }
 
     .card-content {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 16px;
 
       .total-section {
-        flex-shrink: 0;
+        flex: 1;
+        text-align: center;
 
         .total-value {
-          font-size: 26px;
+          font-size: 28px;
           font-weight: 600;
           color: #ffffff;
-          margin-top: 4px;
         }
       }
 
@@ -216,15 +216,15 @@ export default {
           justify-content: flex-start;
           align-items: center;
           padding: 2px 0;
-          gap: 4px;
+          gap: 6px;
 
           .stat-label {
-            font-size: 11px;
+            font-size: 12px;
             opacity: 0.85;
           }
 
           .stat-value {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
           }
         }
